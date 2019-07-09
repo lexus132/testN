@@ -21,6 +21,8 @@ Route::resource('/book', 'BookController', [ 'only' => [ 'index', 'show'] ]);
 Route::resource('/autor', 'AutorController', [ 'only' => [ 'index', 'show'] ]);
 Route::resource('/heading', 'HeadingController', [ 'only' => [ 'index', 'show'] ]);
 
+Route::get('/locale', 'LocalController@index')->name('locale.index');
+
 Route::group([
     'middleware' => 'auth',
     'prefix' => '/admin',

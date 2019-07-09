@@ -78,6 +78,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('heading.index') }}">Рубрики</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locale.index') }}">Locale</a>
+                            </li>
                         @endauth
                     </ul>
 
