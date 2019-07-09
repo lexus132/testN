@@ -109,7 +109,7 @@ class BookController extends Controller
         } else {
             $rez['errors'] = $validator->errors();
         }
-        return response()->json($rez);
+        return response()->json($rez,$rez['status']);
     }
 
     /**
@@ -223,7 +223,7 @@ class BookController extends Controller
         } else {
             $rez['message'] = 'Some error';
         }
-        return response()->json($rez);
+        return response()->json($rez,$rez['status']);
     }
 
 }

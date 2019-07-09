@@ -5,19 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Heading;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\HeadingStoreRequest;
 
 
 class HeadingController extends Controller
 {
-    private $rule= [
-        'name' => 'required | regex:/[\w]*/i | max:30'
-    ];
-
-    private $rule_message = [
-        'name.required' => 'Поле обязательно к заполнению',
-        'name.regex' => 'Использованы недопустимые символы',
-        'name.max' => 'Максимальная длинна 30 символов'
-    ];
 
     public function __construct()
     {
@@ -40,7 +32,7 @@ class HeadingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HeadingStoreRequest $request)
     {
         $rez = [
             'status' => 400,
@@ -48,21 +40,15 @@ class HeadingController extends Controller
             'content' => ''
         ];
 
-        $validator = Validator::make($request->all(), $this->rule, $this->rule_message);
-
-        if (!$validator->fails())
-        {
-            $data = $request->all();
-            $data['created_at'] = date("Y-m-d H:i:s");
-            if($id = $this->model::insertGetId($data)){
-                $rez['link'] = route('heading.show', ['id' => $id]);
-                $rez['status'] = 200;
-                $rez['message'] = 'Ok';
-            }
-        } else {
-            $rez['errors'] = $validator->errors();
+        $data = $request->all();
+        $data['created_at'] = date("Y-m-d H:i:s");
+        if($id = $this->model::insertGetId($data)){
+            $rez['link'] = route('heading.show', ['id' => $id]);
+            $rez['status'] = 200;
+            $rez['message'] = 'Ok';
         }
-        return response()->json($rez);
+
+        return response()->json($rez,$rez['status']);
     }
 
     /**
@@ -102,7 +88,7 @@ class HeadingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(HeadingStoreRequest $request, $id)
     {
         $rez = [
             'status' => 400,
@@ -110,23 +96,17 @@ class HeadingController extends Controller
             'content' => ''
         ];
 
-        $validator = Validator::make($request->except('_method'), $this->rule, $this->rule_message);
-
         if(!empty($id) and $this->model::find($id)){
-            if (!$validator->fails()){
-                $data = $request->except('_method','id');
-                if( $this->model::where('id',$id)->update($data)){
-                    $rez['link'] = route('heading.show', ['id' => $id]);
-                    $rez['status'] = 200;
-                    $rez['message'] = 'Ok';
-                }
-            } else {
-                $rez['errors'] = $validator->errors();
+            $data = $request->except('_method','id');
+            if( $this->model::where('id',$id)->update($data)){
+                $rez['link'] = route('heading.show', ['id' => $id]);
+                $rez['status'] = 200;
+                $rez['message'] = 'Ok';
             }
         } else {
             $rez['message'] = 'Some error';
         }
-        return response()->json($rez);
+        return response()->json($rez,$rez['status']);
     }
 
 }
