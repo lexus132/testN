@@ -62,54 +62,27 @@ class BookController extends Controller
             'content' => ''
         ];
 
-//        $validator = Validator::make($request->all(), $this->rule, $this->rule_message);
-//
-//        if (!$validator->fails()){
-//            $inputs = $request->all();
-//            if(!empty($inputs['autors'])){
-//                foreach ($inputs['autors'] as $key => $val){
-//                    $t_item = Autor::find($key);
-//                    if(empty($t_item->name)){
-//                        $validator->errors()->add("autors[$key]", 'Нет такого значения');
-//                    }
-//                }
-//            }
-//            if(!empty($inputs['headings'])){
-//                foreach ($inputs['headings'] as $key => $val){
-//                    $t_item = Heading::find($key);
-//                    if(empty($t_item->name)){
-//                        $validator->errors()->add("headings[$key]", 'Нет такого значения');
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (count($validator->errors()) == 0)
-//        {
-            $image = time().'.'.$request->img->getClientOriginalExtension();
-            $request->img->move(public_path('img'), $image);
-            $imageName = "/img/$image";
+        $image = time().'.'.$request->img->getClientOriginalExtension();
+        $request->img->move(public_path('img'), $image);
+        $imageName = "/img/$image";
 
-            $id = $this->model::insertGetId([
-                'name' => $request->name,
-                'img' => $imageName,
-                'created_at' => date("Y-m-d H:i:s"),
-            ]);
-            $inputs = $request->all();
-            foreach ($inputs['autors'] as $key => $val){
-                DB::insert('insert into book_autor (book_id,autor_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
-            }
-            foreach ($inputs['headings'] as $key => $val){
-                DB::insert('insert into book_heading (book_id,heading_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
-            }
+        $id = $this->model::insertGetId([
+            'name' => $request->name,
+            'img' => $imageName,
+            'created_at' => date("Y-m-d H:i:s"),
+        ]);
+        $inputs = $request->all();
+        foreach ($inputs['autors'] as $key => $val){
+            DB::insert('insert into book_autor (book_id,autor_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
+        }
+        foreach ($inputs['headings'] as $key => $val){
+            DB::insert('insert into book_heading (book_id,heading_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
+        }
 
-            $rez['link'] = route('book.show', ['id' => $id]);
-            $rez['status'] = 200;
-            $rez['message'] = 'Ok';
+        $rez['link'] = route('book.show', ['id' => $id]);
+        $rez['status'] = 200;
+        $rez['message'] = 'Ok';
 
-//        } else {
-//            $rez['errors'] = $validator->errors();
-//        }
         return response()->json($rez,$rez['status']);
     }
 
@@ -167,66 +140,32 @@ class BookController extends Controller
             'content' => ''
         ];
 
-//        $validator = Validator::make($request->all(), [
-//            'name' => 'required | regex:/[\w]*/i | max:50',
-//            'autors' => 'required | array | min:1',
-//            'autors.*' => 'exists:autors,id',
-//            'headings' => 'required | array | min:1',
-//            'headings.*' => 'exists:headings,id',
-//        ], $this->rule_message);
-
-//        dump($validator);
-//        dump($validator->errors());
-//        dd($validator->errors()->all());
-
         if(!empty($id) and $this->model::find($id)){
-//            if (!$validator->fails()){
-//                $inputs = $request->all();
-//                if(!empty($inputs['autors'])){
-//                    foreach ($inputs['autors'] as $key => $val){
-//                        $t_item = Autor::find($key);
-//                        if(empty($t_item->name)){
-//                            $validator->errors()->add("autors[$key]", 'Нет такого значения');
-//                        }
-//                    }
-//                }
-//                if(!empty($inputs['headings'])){
-//                    foreach ($inputs['headings'] as $key => $val){
-//                        $t_item = Heading::find($key);
-//                        if(empty($t_item->name)){
-//                            $validator->errors()->add("headings[$key]", 'Нет такого значения');
-//                        }
-//                    }
-//                }
-//            }
 
-//            if (count($validator->errors()) == 0){
-                $imageName = $this->model::find($id)->img;
-                if($request->has('img')){
-                    $image = time().'.'.$request->img->getClientOriginalExtension();
-                    $request->img->move(public_path('img'), $image);
-                    $imageName = "/img/$image";
-                }
+            $imageName = $this->model::find($id)->img;
+            if($request->has('img')){
+                $image = time().'.'.$request->img->getClientOriginalExtension();
+                $request->img->move(public_path('img'), $image);
+                $imageName = "/img/$image";
+            }
 
-                $this->model::where('id',$id)->update([
-                                                'name' => $request->name,
-                                                'img' => $imageName
-                                            ]);
-                $inputs = $request->all();
-                DB::select("DELETE FROM book_autor WHERE book_id = :id", ['id' => $id]);
-                foreach ($inputs['autors'] as $key => $val){
-                    DB::insert('insert into book_autor (book_id,autor_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
-                }
-                DB::select("DELETE FROM book_heading WHERE book_id = :id", ['id' => $id]);
-                foreach ($inputs['headings'] as $key => $val){
-                    DB::insert('insert into book_heading (book_id,heading_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
-                }
-                $rez['link'] = route('book.show', ['id' => $id]);
-                $rez['status'] = 200;
-                $rez['message'] = 'Ok';
-//            } else {
-//                $rez['errors'] = $validator->errors();
-//            }
+            $this->model::where('id',$id)->update([
+                                            'name' => $request->name,
+                                            'img' => $imageName
+                                        ]);
+            $inputs = $request->all();
+            DB::select("DELETE FROM book_autor WHERE book_id = :id", ['id' => $id]);
+            foreach ($inputs['autors'] as $key => $val){
+                DB::insert('insert into book_autor (book_id,autor_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
+            }
+            DB::select("DELETE FROM book_heading WHERE book_id = :id", ['id' => $id]);
+            foreach ($inputs['headings'] as $key => $val){
+                DB::insert('insert into book_heading (book_id,heading_id,created_at) values (?,?,?)', [$id,$key,date("Y-m-d H:i:s")]);
+            }
+            $rez['link'] = route('book.show', ['id' => $id]);
+            $rez['status'] = 200;
+            $rez['message'] = 'Ok';
+
         } else {
             $rez['message'] = 'Some error';
         }

@@ -65,11 +65,15 @@ class BookStoreRequest extends FormRequest
 
     public function PreParse(){
 
-        $a_data = Autor::find( array_keys( $this->autors ) )->toArray();
-        $this->autor_exist = (!empty($a_data))? array_map(function($item){return $item['id'];}, $a_data) : [];
+        if(!empty($this->autors)){
+            $a_data = Autor::find( array_keys( $this->autors ) )->toArray();
+            $this->autor_exist = (!empty($a_data))? array_map(function($item){return $item['id'];}, $a_data) : [];
+        }
 
-        $h_data = Heading::find( array_keys( $this->headings ) )->toArray();
-        $this->heading_exist = (!empty($h_data))? array_map(function($item){return $item['id'];}, $h_data) : [];
+        if(!empty($this->headings)){
+            $h_data = Heading::find( array_keys( $this->headings ) )->toArray();
+            $this->heading_exist = (!empty($h_data))? array_map(function($item){return $item['id'];}, $h_data) : [];
+        }
 
     }
 }
