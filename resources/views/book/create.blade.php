@@ -103,8 +103,16 @@
                             }, 2500);
                         } else if(resp_data.errors){
                             for(var i in resp_data.errors){
-                                if($(forma).find("input[name=" + i + "]")){
-                                    $(forma).find("input[name=" + i + "]").after('<div class="error-message"><span>'+ resp_data.errors[i] +'</span></div>');
+                                if(resp_data.errors[i].indexOf('.') > 0){
+                                    let temp_arr = resp_data.errors[i].split('.');
+                                    console.log(`--- `, temp_arr );
+                                    if($(forma).find("input[name=" + temp_arr[0] + `[${temp_arr[1]}]` + "]")){
+                                        $(forma).find("input[name=" + temp_arr[0] + `[${temp_arr[1]}]` + "]").after('<div class="error-message"><span>'+ resp_data.errors[i] +'</span></div>');
+                                    }
+                                } else {
+                                    if($(forma).find("input[name=" + i + "]")){
+                                        $(forma).find("input[name=" + i + "]").after('<div class="error-message"><span>'+ resp_data.errors[i] +'</span></div>');
+                                    }
                                 }
                             }
                         }

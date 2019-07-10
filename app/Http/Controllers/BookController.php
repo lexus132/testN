@@ -8,27 +8,28 @@ use App\Autor;
 use App\Heading;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use App\Http\Requests\BookStoreRequest;
 
 class BookController extends Controller
 {
-    private $rule= [
-        'name' => 'required | regex:/[\w]*/i | max:50',
-        'img' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
-        'autors' => 'required | array | min:1',
-        'headings' => 'required | array | min:1',
-    ];
-
-    private $rule_message = [
-
-        'name.required' => 'Поле обязательно к заполнению',
-        'name.regex' => 'Использованы недопустимые символы',
-        'name.max' => 'Максимальная длинна 50 символов',
-
-        'img:required'  => 'Изображение обязательно',
-        'img:image'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
-        'img:mimes'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
-        'img:max'	    => 'Максимальный размер файла 2Mb'
-    ];
+//    private $rule= [
+//        'name' => 'required | regex:/[\w]*/i | max:50',
+//        'img' => 'required | image | mimes:jpeg,png,jpg,gif,svg | max:2048',
+//        'autors' => 'required | array | min:1',
+//        'headings' => 'required | array | min:1',
+//    ];
+//
+//    private $rule_message = [
+//
+//        'name.required' => 'Поле обязательно к заполнению',
+//        'name.regex' => 'Использованы недопустимые символы',
+//        'name.max' => 'Максимальная длинна 50 символов',
+//
+//        'img:required'  => 'Изображение обязательно',
+//        'img:image'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
+//        'img:mimes'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
+//        'img:max'	    => 'Максимальный размер файла 2Mb'
+//    ];
 
     public function __construct()
     {
@@ -53,7 +54,7 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookStoreRequest $request)
     {
         $rez = [
             'status' => 400,
@@ -61,30 +62,30 @@ class BookController extends Controller
             'content' => ''
         ];
 
-        $validator = Validator::make($request->all(), $this->rule, $this->rule_message);
-
-        if (!$validator->fails()){
-            $inputs = $request->all();
-            if(!empty($inputs['autors'])){
-                foreach ($inputs['autors'] as $key => $val){
-                    $t_item = Autor::find($key);
-                    if(empty($t_item->name)){
-                        $validator->errors()->add("autors[$key]", 'Нет такого значения');
-                    }
-                }
-            }
-            if(!empty($inputs['headings'])){
-                foreach ($inputs['headings'] as $key => $val){
-                    $t_item = Heading::find($key);
-                    if(empty($t_item->name)){
-                        $validator->errors()->add("headings[$key]", 'Нет такого значения');
-                    }
-                }
-            }
-        }
-
-        if (count($validator->errors()) == 0)
-        {
+//        $validator = Validator::make($request->all(), $this->rule, $this->rule_message);
+//
+//        if (!$validator->fails()){
+//            $inputs = $request->all();
+//            if(!empty($inputs['autors'])){
+//                foreach ($inputs['autors'] as $key => $val){
+//                    $t_item = Autor::find($key);
+//                    if(empty($t_item->name)){
+//                        $validator->errors()->add("autors[$key]", 'Нет такого значения');
+//                    }
+//                }
+//            }
+//            if(!empty($inputs['headings'])){
+//                foreach ($inputs['headings'] as $key => $val){
+//                    $t_item = Heading::find($key);
+//                    if(empty($t_item->name)){
+//                        $validator->errors()->add("headings[$key]", 'Нет такого значения');
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (count($validator->errors()) == 0)
+//        {
             $image = time().'.'.$request->img->getClientOriginalExtension();
             $request->img->move(public_path('img'), $image);
             $imageName = "/img/$image";
@@ -106,9 +107,9 @@ class BookController extends Controller
             $rez['status'] = 200;
             $rez['message'] = 'Ok';
 
-        } else {
-            $rez['errors'] = $validator->errors();
-        }
+//        } else {
+//            $rez['errors'] = $validator->errors();
+//        }
         return response()->json($rez,$rez['status']);
     }
 
@@ -158,7 +159,7 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookStoreRequest $request, $id)
     {
         $rez = [
             'status' => 400,
@@ -166,34 +167,40 @@ class BookController extends Controller
             'content' => ''
         ];
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required | regex:/[\w]*/i | max:50',
-            'autors' => 'required | array | min:1',
-            'headings' => 'required | array | min:1',
-        ], $this->rule_message);
+//        $validator = Validator::make($request->all(), [
+//            'name' => 'required | regex:/[\w]*/i | max:50',
+//            'autors' => 'required | array | min:1',
+//            'autors.*' => 'exists:autors,id',
+//            'headings' => 'required | array | min:1',
+//            'headings.*' => 'exists:headings,id',
+//        ], $this->rule_message);
+
+//        dump($validator);
+//        dump($validator->errors());
+//        dd($validator->errors()->all());
 
         if(!empty($id) and $this->model::find($id)){
-            if (!$validator->fails()){
-                $inputs = $request->all();
-                if(!empty($inputs['autors'])){
-                    foreach ($inputs['autors'] as $key => $val){
-                        $t_item = Autor::find($key);
-                        if(empty($t_item->name)){
-                            $validator->errors()->add("autors[$key]", 'Нет такого значения');
-                        }
-                    }
-                }
-                if(!empty($inputs['headings'])){
-                    foreach ($inputs['headings'] as $key => $val){
-                        $t_item = Heading::find($key);
-                        if(empty($t_item->name)){
-                            $validator->errors()->add("headings[$key]", 'Нет такого значения');
-                        }
-                    }
-                }
-            }
+//            if (!$validator->fails()){
+//                $inputs = $request->all();
+//                if(!empty($inputs['autors'])){
+//                    foreach ($inputs['autors'] as $key => $val){
+//                        $t_item = Autor::find($key);
+//                        if(empty($t_item->name)){
+//                            $validator->errors()->add("autors[$key]", 'Нет такого значения');
+//                        }
+//                    }
+//                }
+//                if(!empty($inputs['headings'])){
+//                    foreach ($inputs['headings'] as $key => $val){
+//                        $t_item = Heading::find($key);
+//                        if(empty($t_item->name)){
+//                            $validator->errors()->add("headings[$key]", 'Нет такого значения');
+//                        }
+//                    }
+//                }
+//            }
 
-            if (count($validator->errors()) == 0){
+//            if (count($validator->errors()) == 0){
                 $imageName = $this->model::find($id)->img;
                 if($request->has('img')){
                     $image = time().'.'.$request->img->getClientOriginalExtension();
@@ -217,9 +224,9 @@ class BookController extends Controller
                 $rez['link'] = route('book.show', ['id' => $id]);
                 $rez['status'] = 200;
                 $rez['message'] = 'Ok';
-            } else {
-                $rez['errors'] = $validator->errors();
-            }
+//            } else {
+//                $rez['errors'] = $validator->errors();
+//            }
         } else {
             $rez['message'] = 'Some error';
         }
