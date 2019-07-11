@@ -15,9 +15,8 @@ class ValueExist implements Rule
      */
     public function __construct($big_arr=null)
     {
-        if(!empty($big_arr)){
+        if(!empty($big_arr))
             $this->data_arr = $big_arr;
-        }
     }
 
     /**
