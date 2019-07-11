@@ -7,6 +7,7 @@ use DB;
 use App\Autor;
 use App\Heading;
 use App\Rules\ValueExist;
+use Illuminate\Validation\Rule;
 
 class BookStoreRequest extends FormRequest
 {
@@ -22,6 +23,8 @@ class BookStoreRequest extends FormRequest
         'img:image'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
         'img:mimes'	    => 'Изображение должно быть в формате: jpeg,png,jpg,gif,svg',
         'img:max'	    => 'Максимальный размер файла 2Mb',
+
+        'autors.*.*'   => 'Ошибочное значение',
     ];
 
     /**
@@ -48,6 +51,7 @@ class BookStoreRequest extends FormRequest
             'autors' => 'required|array|min:1',
             'headings' => [ 'required','array','min:1' ],
             'autors.*' => [ new ValueExist($this->autor_exist) ],
+//            'autors.*' => Rule::in($this->autor_exist),
             'headings.*' => [ new ValueExist($this->heading_exist) ],
         ];
 
