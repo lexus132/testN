@@ -26,6 +26,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 </head>
 <body>
+    <video playsinline autoplay muted loop poster="video/image59.jpg" id="bgvid">
+        <!-- <source src="polina.webm" type="video/webm"> -->
+        <source src="video/AmazingNatureFullHD1080p-TimeLapse.mp4" type="video/mp4">
+    </video>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
@@ -82,6 +86,9 @@
                                 <a class="nav-link" href="{{ route('locale.index') }}">Locale</a>
                             </li>
                         @endauth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('auth.user') }}">Auth</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

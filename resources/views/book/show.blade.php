@@ -17,7 +17,7 @@
                         <div class="col-sm-10">
                             <h1>{{ $data['book']->name }}</h1>
                         </div>
-                        @auth
+                        @auth('web')
                             <div class="col-sm-2">
                                 <a class="btn btn-md btn-success" href="{{ route( 'admin.book.edit', ['id' => $data['book']->id] ) }}">update</a>
                                 <a class="btn btn-md btn-danger" href="javascript:void(0)" onclick="confirmdrop('{{ route('admin.book.destroy', ['id' => $data['book']->id]) }}')">delete</a>

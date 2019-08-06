@@ -51,7 +51,6 @@ class BookStoreRequest extends FormRequest
             'autors' => 'required|array|min:1',
             'headings' => [ 'required','array','min:1' ],
             'autors.*' => [ new ValueExist($this->autor_exist) ],
-//            'autors.*' => Rule::in($this->autor_exist),
             'headings.*' => [ new ValueExist($this->heading_exist) ],
         ];
 

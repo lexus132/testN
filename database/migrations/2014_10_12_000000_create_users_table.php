@@ -19,16 +19,28 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('isAdmin')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
 
         DB::table('users')->insert([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => bcrypt('admin'),
+            'name' => 'user',
+            'email' => 'user@user.com',
+            'isAdmin' => 1,
+            'password' => bcrypt('user'),
             'created_at' => date("Y-m-d H:i:s"),
         ]);
+
+        for($i=2;$i<11;$i++){
+            if(DB::table('users')->insert([
+                'name' => "user_$i",
+                'email' => "user_$i@user.com",
+                'password' => bcrypt('user'),
+                'created_at' => date("Y-m-d H:i:s"),
+            ]))
+                dump("--- user_$i : Ok");
+        }
     }
 
     /**
