@@ -89,6 +89,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('auth.user') }}">Auth</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('events.index') }}">Event</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

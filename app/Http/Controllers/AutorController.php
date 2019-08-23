@@ -40,8 +40,10 @@ class AutorController extends Controller
         ];
         $data = $request->all();
         $data['created_at'] = date("Y-m-d H:i:s");
-        if($id = $this->model::insertGetId($data)){
-            $rez['link'] = route('autor.show', ['id' => $id]);
+        $model = $this->model::create($data);
+
+        if($model->id){
+            $rez['link'] = route('autor.show', ['id' => $model->id]);
             $rez['status'] = 200;
             $rez['message'] = 'Ok';
         }

@@ -5,6 +5,11 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use DB;
+use Illuminate\Support\Carbon;
+
+use App\Autor;
+use App\Jobs\TestJober;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +36,16 @@ class AppServiceProvider extends ServiceProvider
 ////                  dump($query->bindings);
 ////            	    dump($query->time);
 //        });
+
+
+        Autor::created(function(Autor $autor){
+
+            dispatch( (new TestJober($autor))->delay(Carbon::now()->addSecond(10)) );
+        });
+
+        Autor::deleted(function(Autor $autor){
+            info("deleted $autor->f_name");
+        });
 
     }
 

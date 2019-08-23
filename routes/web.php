@@ -48,6 +48,14 @@ Route::group([
     Route::resource('/heading', 'HeadingController',[
         'except' => [ 'index', 'show']
     ]);
+
+});
+
+Route::group([
+    'prefix' => 'ev',
+    'as' => 'events.'
+],function(){
+    Route::get('/', 'EventController@index')->name('index');
 });
 
 Route::group([
