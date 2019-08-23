@@ -38,14 +38,13 @@ class AppServiceProvider extends ServiceProvider
 //        });
 
 
-        Autor::created(function(Autor $autor){
-
-            dispatch( (new TestJober($autor))->delay(Carbon::now()->addSecond(10)) );
-        });
-
-        Autor::deleted(function(Autor $autor){
-            info("deleted $autor->f_name");
-        });
+//        Autor::created(function(Autor $autor){
+//            dispatch( (new TestJober($autor))->delay(Carbon::now()->addSecond(10)) );
+//        });
+//
+//        Autor::deleted(function(Autor $autor){
+//            info("deleted $autor->f_name");
+//        });
 
     }
 

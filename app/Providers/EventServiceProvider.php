@@ -27,9 +27,9 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Event::listen('App\Events\SomeEvent', function (){
-            info("Oh yee!" );
-        });
+//        Event::listen('App\Events\SomeEvent', function (){
+//            info("Oh yee!" );
+//        });
 
 //        Event::listen('event.*', function ($eventName, array $data) {
 //            //
