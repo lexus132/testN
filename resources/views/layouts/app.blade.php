@@ -92,6 +92,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('events.index') }}">Event</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('socket.index') }}">Socket</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('cache.index') }}">Cache</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

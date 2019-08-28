@@ -52,6 +52,31 @@ Route::group([
 });
 
 Route::group([
+    'prefix' => '/socket',
+    'as' => 'socket.'
+],function(){
+    Route::get('/', 'SocketController@index')->name('index');
+    Route::get('/queue', function(){
+        event(new \App\Events\TesterEvent());
+    })->name('event');
+
+    Route::group([
+        'prefix' => '/chat',
+        'as' => 'chat.'
+    ],function(){
+        Route::get('/', 'SocketController@chatIndex')->name('index');
+        Route::post('/send', 'SocketController@chatSend')->name('send');
+    });
+});
+
+Route::group([
+    'prefix' => '/cache',
+    'as' => 'cache.'
+],function(){
+    Route::get('/','CacheController@index')->name('index');
+});
+
+Route::group([
     'prefix' => 'ev',
     'as' => 'events.'
 ],function(){
