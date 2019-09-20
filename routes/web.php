@@ -34,6 +34,8 @@ Route::resource('/heading', 'HeadingController', [ 'only' => [ 'index', 'show'] 
 
 Route::get('/locale', 'LocalController@index')->name('locale.index');
 
+Route::get('/mocking', 'MockingController@index')->name('mocking.index');
+
 Route::group([
     'middleware' => 'auth',
     'prefix' => '/admin',

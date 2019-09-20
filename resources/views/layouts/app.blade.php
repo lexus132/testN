@@ -85,6 +85,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('locale.index') }}">Locale</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('mocking.index') }}">Mocking</a>
+                            </li>
                         @endauth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('auth.user') }}">Auth</a>
